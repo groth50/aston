@@ -1,5 +1,5 @@
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 
 public class MyArrayList<E> {
     private static final int DEFAULT_CAPACITY = 10;
@@ -33,9 +33,18 @@ public class MyArrayList<E> {
         list.add(9, 10);
         list.add(-1);
         list.add(1000);
+
         MyArrayList<Integer> sortedList = MyArrayList.quickSort(list);
         for (int i = 0; i < sortedList.size(); i++) {
             System.out.print(sortedList.get(i));
+            System.out.print(" ");
+        }
+
+        System.out.println();
+
+        MyArrayList<Integer> sortedListDesc = MyArrayList.quickSort(list, (i1, i2) -> i2 - i1);
+        for (int i = 0; i < sortedListDesc.size(); i++) {
+            System.out.print(sortedListDesc.get(i));
             System.out.print(" ");
         }
 //        list.remove(10);
@@ -122,10 +131,14 @@ public class MyArrayList<E> {
     }
 
     public static <T extends Comparable<? super T>> MyArrayList<T> quickSort(MyArrayList<T> list) {
-        T[] array = toArray(list);
-        System.out.println(Arrays.toString(array));
+        T[] array = toComparableArray(list);
         quickSort(array, 0, array.length - 1);
-        System.out.println(Arrays.toString(array));
+        return new MyArrayList<>(array, array.length);
+    }
+
+    public static <T> MyArrayList<T> quickSort(MyArrayList<T> list, Comparator<T> comparator) {
+        T[] array = toArray(list);
+        quickSort(array, 0, array.length - 1, comparator);
         return new MyArrayList<>(array, array.length);
     }
 
@@ -135,8 +148,16 @@ public class MyArrayList<E> {
         }
     }
 
-    private static <T extends Comparable<? super T>> T[] toArray(MyArrayList<T> list) {
+    private static <T extends Comparable<? super T>> T[] toComparableArray(MyArrayList<T> list) {
         Comparable[] array = new Comparable[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
+        return (T[]) array;
+    }
+
+    private static <T> T[] toArray(MyArrayList<T> list) {
+        Object[] array = new Object[list.size()];
         for (int i = 0; i < list.size(); i++) {
             array[i] = list.get(i);
         }
@@ -177,6 +198,42 @@ public class MyArrayList<E> {
 
         if (high > i)
             quickSort(array, i, high);
+    }
+
+    private static <T> void quickSort(T[] array, int low, int high, Comparator<T> comparator) {
+        if (array.length < 2)
+            return;
+
+        if (low >= high)
+            return;
+
+        int middle = low + (high - low) / 2;
+        T pivot = array[middle];
+
+        int i = low, j = high;
+        while (i <= j) {
+            while (comparator.compare(array[i], pivot) < 0) {
+                i++;
+            }
+
+            while (comparator.compare(array[j], pivot) > 0) {
+                j--;
+            }
+
+            if (i <= j) {
+                T swap = array[i];
+                array[i] = array[j];
+                array[j] = swap;
+                i++;
+                j--;
+            }
+        }
+
+        if (low < j)
+            quickSort(array, low, j, comparator);
+
+        if (high > i)
+            quickSort(array, i, high, comparator);
     }
 
 }
