@@ -1,4 +1,3 @@
-package main.java;
 
 import java.util.Comparator;
 
@@ -26,44 +25,6 @@ public class MyArrayList<E> {
     private MyArrayList(Object[] array, int size) {
         this.array = array;
         this.size = size;
-    }
-
-    public static void main(String[] args) {
-        MyArrayList<Integer> list = new MyArrayList<>();
-        list.add(100);
-        for (int i = 0; i < 22; i++) {
-            list.add(i, i);
-            System.out.println(list.get(i));
-        }
-
-        list.add(999, 10);
-        list.add(99, 10);
-        list.add(9, 10);
-        list.add(-1);
-        list.add(1000);
-
-        MyArrayList<Integer> sortedList = MyArrayList.quickSort(list);
-        for (int i = 0; i < sortedList.size(); i++) {
-            System.out.print(sortedList.get(i));
-            System.out.print(" ");
-        }
-
-        System.out.println();
-
-        MyArrayList<Integer> sortedListDesc = MyArrayList.quickSort(list, (i1, i2) -> i2 - i1);
-        for (int i = 0; i < sortedListDesc.size(); i++) {
-            System.out.print(sortedListDesc.get(i));
-            System.out.print(" ");
-        }
-//        list.remove(10);
-//        list.remove(22);
-//        list.clear();
-
-
-//        ArrayList<Integer> list = new ArrayList<>();
-//        list.add(10);
-//        list.set(1,20);
-//        System.out.println(list);
     }
 
     /**
